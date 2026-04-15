@@ -8,17 +8,17 @@ export default async function handler(req, res) {
   }
   try {
     const response = await fetch(
-      `https://api.groq.com/openai/v1/chat/completions}`,  
+      "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: prompt }],
-            },
+          model: "llama3-8b-8192",  // ✅ بدلت contents بـ model
+          messages: [
+            { role: "user", content: prompt }
           ],
         }),
       }
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: data });
     }
     const result =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data?.choices?.[0]?.message?.content ||  // ✅ بدلت candidates بـ choices
       "ماكان حتى جواب";
     return res.status(200).json({ result });
   } catch (err) {
