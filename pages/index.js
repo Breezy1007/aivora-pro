@@ -6,36 +6,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const generate = async () => {
-  setLoading(true);
-  setResult("");
-
-  try {
-    const res = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
-
-    const data = await res.json();
-
-    console.log("API Response:", data); 
-
-    if (data.result) {
-      setResult(data.result);
-    } else if (data.error) {
-      setResult("Error: " + JSON.stringify(data.error));
-    } else {
-      setResult("ماكان حتى جواب");
-    }
-
-  } catch (err) {
-    setResult("Error: " + err.message);
-  }
-
-  setLoading(false);
-};
+    setLoading(true);
+    setResult("");
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -44,9 +16,7 @@ export default function Home() {
         },
         body: JSON.stringify({ prompt }),
       });
-
       const data = await res.json();
-
       if (data.result) {
         setResult(data.result);
       } else {
@@ -55,14 +25,12 @@ export default function Home() {
     } catch (err) {
       setResult("Error: " + err.message);
     }
-
     setLoading(false);
   };
 
   return (
     <div style={{ padding: 40, fontFamily: "Arial" }}>
       <h1>Aivora Pro 🚀</h1>
-
       <textarea
         rows={4}
         style={{ width: "100%", marginBottom: 10 }}
@@ -70,11 +38,9 @@ export default function Home() {
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
       />
-
       <button onClick={generate}>
         {loading ? "جاري..." : "Generate"}
       </button>
-
       <div style={{ marginTop: 20 }}>
         <strong>الجواب:</strong>
         <p>{result}</p>
