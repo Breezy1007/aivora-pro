@@ -6,9 +6,36 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const generate = async () => {
-    setLoading(true);
-    setResult("");
+  setLoading(true);
+  setResult("");
 
+  try {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    const data = await res.json();
+
+    console.log("API Response:", data); 
+
+    if (data.result) {
+      setResult(data.result);
+    } else if (data.error) {
+      setResult("Error: " + JSON.stringify(data.error));
+    } else {
+      setResult("ماكان حتى جواب");
+    }
+
+  } catch (err) {
+    setResult("Error: " + err.message);
+  }
+
+  setLoading(false);
+};
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
